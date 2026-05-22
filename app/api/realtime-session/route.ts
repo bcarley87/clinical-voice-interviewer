@@ -60,8 +60,16 @@ export async function GET() {
   }
 
   const data = (await response.json()) as {
-    client_secret: { value: string };
+    client_secret?: { value?: string };
   };
 
-  return Response.json({ clientSecret: data.client_secret.value });
+  const clientSecret = data.client_secret?.value;
+  if (!clientSecret) {
+    return Response.json(
+      { error: "OpenAI did not return a client secret" },
+      { status: 502 }
+    );
+  }
+
+  return Response.json({ clientSecret });
 }

@@ -63,17 +63,23 @@ function downloadFile(content: string, filename: string) {
   const a = document.createElement("a");
   a.href = url;
   a.download = filename;
+  document.body.appendChild(a);
   a.click();
+  a.remove();
   URL.revokeObjectURL(url);
 }
 
 function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
+  const [state, setState] = useState<"idle" | "copied" | "error">("idle");
 
   const handleCopy = useCallback(async () => {
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(text);
+      setState("copied");
+    } catch {
+      setState("error");
+    }
+    setTimeout(() => setState("idle"), 2000);
   }, [text]);
 
   return (
@@ -81,10 +87,15 @@ function CopyButton({ text }: { text: string }) {
       onClick={handleCopy}
       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border hover:bg-muted text-foreground text-xs font-medium transition-colors"
     >
-      {copied ? (
+      {state === "copied" ? (
         <>
           <Check className="w-3.5 h-3.5 text-green-500" />
           Copied!
+        </>
+      ) : state === "error" ? (
+        <>
+          <Copy className="w-3.5 h-3.5 text-destructive" />
+          Failed
         </>
       ) : (
         <>
@@ -103,7 +114,7 @@ function SessionEnded({
   messages: TranscriptMessage[];
   elapsedSeconds: number;
 }) {
-  const [profileState, setProfileState] = useState<GenerationState>("idle");
+  const [profileState, setProfileState] = useState<GenerationState>("loading");
   const [compressState, setCompressState] = useState<GenerationState>("idle");
   const [fullProfile, setFullProfile] = useState("");
   const [compressedProfile, setCompressedProfile] = useState("");
@@ -136,9 +147,6 @@ function SessionEnded({
     generationStarted.current = true;
 
     (async () => {
-      setProfileState("loading");
-      setProfileError("");
-
       try {
         const res = await fetch("/api/generate-profile", {
           method: "POST",
@@ -158,10 +166,9 @@ function SessionEnded({
     })();
   }, [messages, runCompression]);
 
-  const timestamp = new Date()
-    .toISOString()
-    .replace(/[:.]/g, "-")
-    .slice(0, 19);
+  const timestamp = useRef(
+    new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19)
+  ).current;
 
   return (
     <div className="flex flex-col h-dvh bg-background">

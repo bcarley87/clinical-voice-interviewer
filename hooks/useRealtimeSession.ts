@@ -161,6 +161,9 @@ export function useRealtimeSession() {
       };
 
       pc.onconnectionstatechange = () => {
+        // Only act on unintentional failures; intentional stop() sets pcRef to null
+        // before this fires, so skip if we already cleaned up.
+        if (pcRef.current === null) return;
         if (
           pc.connectionState === "failed" ||
           pc.connectionState === "closed"
@@ -197,7 +200,9 @@ export function useRealtimeSession() {
       };
 
       dc.onerror = () => {
-        setError("Data channel error — connection may be unstable");
+        setError("Data channel error — connection lost");
+        setStatus("ended");
+        cleanup();
       };
 
       // SDP offer → OpenAI → SDP answer

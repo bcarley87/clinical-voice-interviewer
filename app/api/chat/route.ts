@@ -24,7 +24,15 @@ async function loadSystemPrompt(): Promise<string> {
 }
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  let messages: UIMessage[];
+  try {
+    ({ messages } = await req.json());
+  } catch {
+    return Response.json({ error: "Invalid request body" }, { status: 400 });
+  }
+  if (!Array.isArray(messages)) {
+    return Response.json({ error: "messages must be an array" }, { status: 400 });
+  }
   const systemPrompt = await loadSystemPrompt();
 
   const result = streamText({
