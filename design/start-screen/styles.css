@@ -1,0 +1,187 @@
+/* ───────────────────────────────────────────────────────────────
+   Shared theme tokens for the Clinical Voice Interviewer redesign.
+   Both directions read from the same theme variables so the
+   Tweaks panel can drive both at once.
+   ─────────────────────────────────────────────────────────────── */
+
+:root {
+  /* base — overridden by data-theme/data-density/data-mode */
+  --cv-bg:        oklch(0.18 0.012 65);
+  --cv-bg-2:      oklch(0.215 0.012 65);
+  --cv-bg-3:      oklch(0.255 0.011 65);
+  --cv-line:      oklch(0.32 0.011 65 / 0.65);
+  --cv-line-soft: oklch(0.32 0.011 65 / 0.32);
+  --cv-fg:        oklch(0.96 0.008 70);
+  --cv-fg-mut:    oklch(0.74 0.012 70);
+  --cv-fg-dim:    oklch(0.58 0.012 70);
+  --cv-accent:    oklch(0.78 0.135 60);   /* warm amber default */
+  --cv-accent-fg: oklch(0.16 0.02 60);
+  --cv-accent-soft: oklch(0.78 0.135 60 / 0.16);
+  --cv-danger:    oklch(0.68 0.16 25);
+
+  --cv-pad: 1;       /* density multiplier */
+  --cv-radius: 14px;
+  --cv-radius-sm: 8px;
+
+  --cv-serif: "Newsreader", "Source Serif 4", Georgia, serif;
+  --cv-sans:  "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cv-mono:  "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* THEMES — single accent per theme */
+[data-theme="amber"] {
+  --cv-accent: oklch(0.79 0.135 65);
+  --cv-accent-fg: oklch(0.16 0.02 65);
+  --cv-accent-soft: oklch(0.79 0.135 65 / 0.18);
+}
+[data-theme="coral"] {
+  --cv-accent: oklch(0.74 0.155 30);
+  --cv-accent-fg: oklch(0.16 0.02 30);
+  --cv-accent-soft: oklch(0.74 0.155 30 / 0.18);
+}
+[data-theme="sage"] {
+  --cv-accent: oklch(0.78 0.105 150);
+  --cv-accent-fg: oklch(0.16 0.02 150);
+  --cv-accent-soft: oklch(0.78 0.105 150 / 0.18);
+}
+[data-theme="cyan"] {
+  --cv-accent: oklch(0.80 0.105 215);
+  --cv-accent-fg: oklch(0.14 0.02 215);
+  --cv-accent-soft: oklch(0.80 0.105 215 / 0.18);
+}
+[data-theme="blue"] {
+  --cv-accent: oklch(0.78 0.115 245);
+  --cv-accent-fg: oklch(0.14 0.02 245);
+  --cv-accent-soft: oklch(0.78 0.115 245 / 0.18);
+}
+
+/* DARK / LIGHT */
+[data-mode="dark"] {
+  --cv-bg:        oklch(0.18 0.012 65);
+  --cv-bg-2:      oklch(0.215 0.012 65);
+  --cv-bg-3:      oklch(0.255 0.011 65);
+  --cv-line:      oklch(0.32 0.011 65 / 0.65);
+  --cv-line-soft: oklch(0.32 0.011 65 / 0.32);
+  --cv-fg:        oklch(0.96 0.008 70);
+  --cv-fg-mut:    oklch(0.74 0.012 70);
+  --cv-fg-dim:    oklch(0.55 0.012 70);
+}
+[data-mode="light"] {
+  --cv-bg:        oklch(0.985 0.005 75);
+  --cv-bg-2:      oklch(0.965 0.006 75);
+  --cv-bg-3:      oklch(0.945 0.007 75);
+  --cv-line:      oklch(0.86 0.008 75);
+  --cv-line-soft: oklch(0.90 0.008 75);
+  --cv-fg:        oklch(0.20 0.012 65);
+  --cv-fg-mut:    oklch(0.42 0.012 65);
+  --cv-fg-dim:    oklch(0.58 0.012 65);
+}
+[data-mode="light"][data-theme="amber"]  { --cv-accent: oklch(0.66 0.14 60); --cv-accent-fg: oklch(0.99 0 0); --cv-accent-soft: oklch(0.66 0.14 60 / 0.14); }
+[data-mode="light"][data-theme="coral"]  { --cv-accent: oklch(0.62 0.18 30); --cv-accent-fg: oklch(0.99 0 0); --cv-accent-soft: oklch(0.62 0.18 30 / 0.14); }
+[data-mode="light"][data-theme="sage"]   { --cv-accent: oklch(0.55 0.12 150); --cv-accent-fg: oklch(0.99 0 0); --cv-accent-soft: oklch(0.55 0.12 150 / 0.14); }
+[data-mode="light"][data-theme="cyan"]   { --cv-accent: oklch(0.55 0.12 215); --cv-accent-fg: oklch(0.99 0 0); --cv-accent-soft: oklch(0.55 0.12 215 / 0.14); }
+[data-mode="light"][data-theme="blue"]   { --cv-accent: oklch(0.52 0.16 245); --cv-accent-fg: oklch(0.99 0 0); --cv-accent-soft: oklch(0.52 0.16 245 / 0.14); }
+
+/* DENSITY */
+[data-density="comfortable"] { --cv-pad: 1; }
+[data-density="compact"]     { --cv-pad: 0.78; }
+
+/* ─── Shared primitives ─────────────────────────────────────── */
+.cv-root {
+  background: var(--cv-bg);
+  color: var(--cv-fg);
+  font-family: var(--cv-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.cv-kicker {
+  font-family: var(--cv-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--cv-fg-mut);
+  font-weight: 500;
+}
+
+.cv-serif {
+  font-family: var(--cv-serif);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+}
+
+.cv-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 24px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: var(--cv-accent);
+  color: var(--cv-accent-fg);
+  font: 500 15px/1 var(--cv-sans);
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+  box-shadow: 0 0 0 6px var(--cv-accent-soft), 0 18px 40px -20px var(--cv-accent);
+}
+.cv-btn:hover { transform: translateY(-1px); }
+.cv-btn:active { transform: translateY(0); }
+
+.cv-btn-ghost {
+  background: transparent;
+  color: var(--cv-fg);
+  border: 1px solid var(--cv-line);
+  box-shadow: none;
+  height: 40px; padding: 0 16px;
+  font-size: 13px;
+  border-radius: 10px;
+}
+.cv-btn-ghost:hover { background: var(--cv-bg-3); }
+
+.cv-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 26px; padding: 0 10px;
+  border-radius: 999px;
+  background: var(--cv-bg-3);
+  border: 1px solid var(--cv-line-soft);
+  font: 500 11px/1 var(--cv-mono);
+  color: var(--cv-fg-mut);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.cv-chip .dot {
+  width: 6px; height: 6px; border-radius: 999px; background: var(--cv-accent);
+  box-shadow: 0 0 0 4px var(--cv-accent-soft);
+}
+
+/* breathing ring used in direction A */
+@keyframes cvBreathe {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50%      { transform: scale(1.08); opacity: 1; }
+}
+@keyframes cvBreathe2 {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50%      { transform: scale(1.12); opacity: 0.85; }
+}
+@keyframes cvBreathe3 {
+  0%, 100% { transform: scale(1); opacity: 0.25; }
+  50%      { transform: scale(1.18); opacity: 0.5; }
+}
+
+/* mic-level bars used in direction B */
+@keyframes cvBar {
+  0%, 100% { transform: scaleY(0.35); }
+  50%      { transform: scaleY(1); }
+}
+
+.cv-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--cv-line), transparent);
+}
