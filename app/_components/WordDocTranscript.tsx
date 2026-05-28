@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import type { TranscriptMessage } from "@/hooks/useRealtimeSession";
 
 interface WordDocTranscriptProps {
@@ -8,6 +9,13 @@ interface WordDocTranscriptProps {
 }
 
 export function WordDocTranscript({ isActive, messages }: WordDocTranscriptProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages]);
+
   const wordCount = messages.reduce(
     (acc, m) => acc + m.text.trim().split(/\s+/).filter(Boolean).length,
     0
@@ -54,6 +62,7 @@ export function WordDocTranscript({ isActive, messages }: WordDocTranscriptProps
 
       {/* Doc body */}
       <div
+        ref={scrollRef}
         style={{
           padding: "24px 28px 28px",
           flex: 1,

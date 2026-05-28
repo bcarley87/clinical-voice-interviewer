@@ -27,7 +27,7 @@ export function StatusBar({ isActive }: StatusBarProps) {
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
           <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: 999, background: "var(--primary)", boxShadow: "0 0 0 3px var(--accent-soft)", flexShrink: 0 }} />
-          {isActive ? "Live transcript · gpt-4o-realtime" : "Realtime · gpt-4o-realtime"}
+          {isActive ? "Live transcript · gpt-4o-realtime-preview" : "Realtime · gpt-4o-realtime-preview"}
         </span>
         <span>Latency 142 ms</span>
         <span>HIPAA-secure</span>
