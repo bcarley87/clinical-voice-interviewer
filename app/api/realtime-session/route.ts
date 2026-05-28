@@ -34,7 +34,7 @@ export async function GET() {
         expires_after: { anchor: "created_at", seconds: 600 },
         session: {
           type: "realtime",
-          model: "gpt-realtime",
+          model: "gpt-4o-realtime-preview",
           instructions,
           audio: { output: { voice: "coral" } },
         },
