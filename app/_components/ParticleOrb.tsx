@@ -113,6 +113,7 @@ export function ParticleOrb({ speaking, waveStyle = "ripple", size = 320 }: Part
             ref={(el) => { ringRefs.current[i] = el; }}
             className={`${styles.ring} ${styles[`ring${i}` as keyof typeof styles]}`}
             viewBox="0 0 200 200"
+            suppressHydrationWarning
           >
             {ring.angles.map((t, j) => (
               <circle
