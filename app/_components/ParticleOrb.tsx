@@ -123,6 +123,7 @@ export function ParticleOrb({ speaking, waveStyle = "ripple", size = 320 }: Part
                 r={ring.props[j].sz}
                 fill="currentColor"
                 opacity={ring.props[j].op}
+                suppressHydrationWarning
               />
             ))}
           </svg>
