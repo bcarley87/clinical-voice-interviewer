@@ -29,19 +29,19 @@ Start by:
 
 ## Patient Vignette
 
-**Patient:** 58-year-old male, presenting to your clinic for a follow-up visit.
+**Patient:** 58-year-old male. High school teacher. Former smoker (15 pack-year, quit 12 years ago). PMH: type 2 diabetes (A1c 7.2, on metformin), mild GERD. ECOG 0.
 
-**Chief Complaint:** Fatigue and worsening shortness of breath on exertion over the past 3 weeks.
+**Presenting for:** Radiation oncology consultation — definitive treatment discussion for left tonsillar squamous cell carcinoma.
 
-**Vitals:** BP 148/92, HR 88, RR 16, SpO2 95% on room air, Weight 214 lbs (up 6 lbs from last visit 4 weeks ago).
+**ENT Referral:** Biopsy-confirmed p16-positive squamous cell carcinoma, left tonsil. Clinical stage T2 N2a M0 (AJCC 8th edition). Dental clearance completed.
 
-**PMH:** Type 2 diabetes (diagnosed 12 years ago), hypertension, hyperlipidemia, former smoker (quit 10 years ago, 20 pack-year history).
+**PET/CT:** 3.1 cm left tonsillar mass, SUVmax 14.2. Single 2.8 cm left level II lymph node, SUVmax 11.8. No distant metastatic disease.
 
-**Medications:** Metformin 1000mg BID, lisinopril 10mg daily, atorvastatin 40mg nightly, aspirin 81mg daily.
+**MRI Neck:** Confirms tonsillar and nodal disease. No skull base involvement. No retropharyngeal adenopathy.
 
-**Labs (drawn 2 days ago):** HbA1c 8.2%, BMP within normal limits except creatinine 1.3 (baseline 1.1), BNP 380.
+**Medical Oncology:** Recommending concurrent cisplatin if proceeding with definitive radiation.
 
-**Exam:** Mild bilateral lower extremity pitting edema to the ankles. Lungs with faint bibasilar crackles. S3 gallop on cardiac exam.
+**Your Encounter:** Patient is anxious and well-informed. Asking detailed questions about long-term swallowing outcomes.
 
 ---
 
