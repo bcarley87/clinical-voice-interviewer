@@ -66,10 +66,33 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
+function FormattingScreen() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100dvh",
+        gap: 16,
+        background: "var(--background)",
+      }}
+    >
+      <Loader2 style={{ width: 28, height: 28, animation: "spin 1s linear infinite", color: "var(--muted-foreground)" }} />
+      <p style={{ margin: 0, fontSize: 14, color: "var(--muted-foreground)", fontFamily: "var(--font-sans)" }}>
+        Formatting your note…
+      </p>
+    </div>
+  );
+}
+
 function SessionEnded({
+  formattedNote,
   messages,
   elapsedSeconds,
 }: {
+  formattedNote: string;
   messages: TranscriptMessage[];
   elapsedSeconds: number;
 }) {
@@ -110,7 +133,7 @@ function SessionEnded({
         const res = await fetch("/api/generate-profile", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages }),
+          body: JSON.stringify({ formattedNote, messages }),
         });
         const data = (await res.json()) as { profile?: string; error?: string };
         if (!res.ok || data.error) throw new Error(data.error ?? `${res.status}`);
@@ -280,21 +303,66 @@ export default function Home() {
     error,
     start,
     stop,
+    review,
     confirm,
   } = useRealtimeSession();
 
+  const [formattedNote, setFormattedNote] = useState("");
+  const [confirmedNote, setConfirmedNote] = useState("");
   const [confirmedMessages, setConfirmedMessages] = useState<TranscriptMessage[]>([]);
 
+  // When stop() fires, status becomes "formatting" — run the format API then transition to review
+  useEffect(() => {
+    if (status !== "formatting") return;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await fetch("/api/format-note", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages }),
+        });
+        const data = (await res.json()) as { formatted?: string; error?: string };
+        if (!res.ok || data.error) throw new Error(data.error ?? `${res.status}`);
+        if (!cancelled) setFormattedNote(data.formatted ?? "");
+      } catch {
+        // Fallback to raw merged user text so the review step is never blocked
+        const raw = messages
+          .filter((m) => m.role === "user")
+          .map((m) => m.text.trim())
+          .join("\n\n");
+        if (!cancelled) setFormattedNote(raw);
+      }
+      if (!cancelled) review();
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [status]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleConfirm = useCallback(
-    (edited: TranscriptMessage[]) => {
-      setConfirmedMessages(edited);
+    (note: string, msgs: TranscriptMessage[]) => {
+      setConfirmedNote(note);
+      setConfirmedMessages(msgs);
       confirm();
     },
     [confirm]
   );
 
+  if (status === "formatting") {
+    return <FormattingScreen />;
+  }
+
   if (status === "ended") {
-    return <SessionEnded messages={confirmedMessages} elapsedSeconds={elapsedSeconds} />;
+    return (
+      <SessionEnded
+        formattedNote={confirmedNote}
+        messages={confirmedMessages}
+        elapsedSeconds={elapsedSeconds}
+      />
+    );
   }
 
   return (
@@ -305,6 +373,7 @@ export default function Home() {
       voiceActivity={voiceActivity}
       messages={messages}
       aiPartial={aiPartial}
+      formattedNote={formattedNote}
       elapsedSeconds={elapsedSeconds}
       error={error}
       onStart={start}

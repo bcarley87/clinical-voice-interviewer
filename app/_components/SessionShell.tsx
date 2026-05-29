@@ -9,7 +9,6 @@ import { StatusBar } from "./StatusBar";
 import { CaseVignette } from "./CaseVignette";
 import styles from "./SessionShell.module.css";
 
-
 interface SessionShellProps {
   isActive: boolean;
   isConnecting: boolean;
@@ -17,11 +16,12 @@ interface SessionShellProps {
   voiceActivity: VoiceActivity;
   messages: TranscriptMessage[];
   aiPartial?: string;
+  formattedNote?: string;
   elapsedSeconds: number;
   error: string | null;
   onStart: () => void;
   onStop: () => void;
-  onConfirm?: (edited: TranscriptMessage[]) => void;
+  onConfirm?: (note: string, messages: TranscriptMessage[]) => void;
 }
 
 export function SessionShell({
@@ -31,6 +31,7 @@ export function SessionShell({
   voiceActivity,
   messages,
   aiPartial = "",
+  formattedNote = "",
   elapsedSeconds,
   error,
   onStart,
@@ -40,25 +41,18 @@ export function SessionShell({
   const speaking = voiceActivity === "user_speaking";
   const columnActive = isActive || isReview;
 
-  const [editedMessages, setEditedMessages] = useState<TranscriptMessage[]>([]);
-  const snappedRef = useRef(false);
+  const [editedNote, setEditedNote] = useState("");
+  const noteInitialized = useRef(false);
 
   useEffect(() => {
-    if (isReview && !snappedRef.current) {
-      snappedRef.current = true;
-      setEditedMessages(messages);
+    if (isReview && formattedNote && !noteInitialized.current) {
+      noteInitialized.current = true;
+      setEditedNote(formattedNote);
     }
     if (!isReview) {
-      snappedRef.current = false;
+      noteInitialized.current = false;
     }
-  }, [isReview, messages]);
-
-  const handleEdit = (id: string, text: string) =>
-    setEditedMessages((prev) => prev.map((m) => (m.id === id ? { ...m, text } : m)));
-
-  const handleConfirm = () => {
-    onConfirm?.(editedMessages);
-  };
+  }, [isReview, formattedNote]);
 
   return (
     <div className={styles.root}>
@@ -67,7 +61,7 @@ export function SessionShell({
       <div className={styles.body}>
         {/* Left column */}
         <div className={styles.left} data-active={columnActive ? "yes" : "no"}>
-          {/* Corner pill — fades in on active */}
+          {/* Corner pill */}
           <div className={styles.cornerPill}>
             <div className={styles.cornerOrbClip}>
               <ParticleOrb speaking={speaking} waveStyle="gentle" size={56} />
@@ -78,7 +72,7 @@ export function SessionShell({
             </span>
           </div>
 
-          {/* Header — collapses on active */}
+          {/* Header */}
           <div className={styles.header}>
             <div className={styles.kicker}>Session 014 · {isActive ? "Recording" : "Ready"}</div>
             <h1 className={styles.title}>
@@ -98,16 +92,20 @@ export function SessionShell({
             <WordDocTranscript
               isActive={isActive}
               isEditing={isReview}
-              messages={isReview ? editedMessages : messages}
+              messages={messages}
               aiPartial={aiPartial}
-              onEdit={handleEdit}
+              editedNote={editedNote}
+              onNoteChange={setEditedNote}
             />
           </div>
 
           {/* CTA */}
           <div className={styles.cta}>
             {isReview ? (
-              <button className={styles.confirmBtn} onClick={handleConfirm}>
+              <button
+                className={styles.confirmBtn}
+                onClick={() => onConfirm?.(editedNote, messages)}
+              >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12" />
                   <polyline points="12 5 19 12 12 19" />

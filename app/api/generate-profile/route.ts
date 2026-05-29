@@ -16,39 +16,46 @@ async function loadProfilePrompt(): Promise<string> {
   }
 }
 
-function formatTranscript(messages: TranscriptMessage[]): string {
-  return messages
-    .map((m) => {
-      const speaker = m.role === "assistant" ? "INTERVIEWER" : "PHYSICIAN";
-      return `${speaker}: ${m.text}`;
-    })
-    .join("\n\n");
+function buildTranscript(formattedNote: string, messages: TranscriptMessage[]): string {
+  const parts: string[] = [];
+
+  if (formattedNote.trim()) {
+    parts.push("DICTATED NOTE (physician-edited):\n\n" + formattedNote.trim());
+  }
+
+  const qaMessages = messages.filter((m) => m.role === "assistant" || m.role === "user");
+  if (qaMessages.length > 0) {
+    const qa = qaMessages
+      .map((m) => {
+        const speaker = m.role === "assistant" ? "INTERVIEWER" : "PHYSICIAN";
+        return `${speaker}: ${m.text}`;
+      })
+      .join("\n\n");
+    parts.push("FOLLOW-UP INTERVIEW:\n\n" + qa);
+  }
+
+  return parts.join("\n\n---\n\n");
 }
 
 export async function POST(req: Request) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    return Response.json(
-      { error: "OPENAI_API_KEY is not configured" },
-      { status: 500 }
-    );
+    return Response.json({ error: "OPENAI_API_KEY is not configured" }, { status: 500 });
   }
 
+  let formattedNote: string;
   let messages: TranscriptMessage[];
   try {
-    ({ messages } = await req.json());
+    ({ formattedNote, messages } = await req.json());
   } catch {
     return Response.json({ error: "Invalid request body" }, { status: 400 });
   }
 
-  if (!Array.isArray(messages) || messages.length === 0) {
-    return Response.json(
-      { error: "No transcript messages provided" },
-      { status: 400 }
-    );
+  if (!formattedNote?.trim() && (!Array.isArray(messages) || messages.length === 0)) {
+    return Response.json({ error: "No transcript content provided" }, { status: 400 });
   }
 
-  const transcript = formatTranscript(messages);
+  const transcript = buildTranscript(formattedNote ?? "", messages ?? []);
   const systemPrompt = await loadProfilePrompt();
 
   try {

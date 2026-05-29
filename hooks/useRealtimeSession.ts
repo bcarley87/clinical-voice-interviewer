@@ -8,7 +8,7 @@ export type TranscriptMessage = {
   text: string;
 };
 
-export type SessionStatus = "idle" | "connecting" | "active" | "review" | "ended";
+export type SessionStatus = "idle" | "connecting" | "active" | "formatting" | "review" | "ended";
 export type VoiceActivity =
   | "listening"
   | "user_speaking"
@@ -240,8 +240,12 @@ export function useRealtimeSession() {
 
   const stop = useCallback(() => {
     cleanup();
-    setStatus("review");
+    setStatus("formatting");
   }, [cleanup]);
+
+  const review = useCallback(() => {
+    setStatus("review");
+  }, []);
 
   const confirm = useCallback(() => {
     setStatus("ended");
@@ -287,6 +291,7 @@ export function useRealtimeSession() {
     error,
     start,
     stop,
+    review,
     confirm,
     sendText,
   };
