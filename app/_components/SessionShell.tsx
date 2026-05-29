@@ -61,16 +61,18 @@ export function SessionShell({
       <div className={styles.body}>
         {/* Left column */}
         <div className={styles.left} data-active={columnActive ? "yes" : "no"}>
-          {/* Corner pill */}
-          <div className={styles.cornerPill}>
-            <div className={styles.cornerOrbClip}>
-              <ParticleOrb speaking={speaking} waveStyle="gentle" size={56} />
+          {/* Corner pill — hidden during review/editing */}
+          {!isReview && (
+            <div className={styles.cornerPill}>
+              <div className={styles.cornerOrbClip}>
+                <ParticleOrb speaking={speaking} waveStyle="gentle" size={56} />
+              </div>
+              <span className={styles.cornerStatus}>
+                <span className={styles.orbDot} />
+                {voiceActivity === "ai_speaking" ? "AI speaking" : "Listening"}
+              </span>
             </div>
-            <span className={styles.cornerStatus}>
-              <span className={styles.orbDot} />
-              {voiceActivity === "ai_speaking" ? "AI speaking" : "Listening"}
-            </span>
-          </div>
+          )}
 
           {/* Header */}
           <div className={styles.header}>
@@ -86,9 +88,11 @@ export function SessionShell({
 
           {/* Stage */}
           <div className={styles.stage}>
-            <div className={styles.orbFrame}>
-              <ParticleOrb speaking={speaking} />
-            </div>
+            {!isReview && (
+              <div className={styles.orbFrame}>
+                <ParticleOrb speaking={speaking} />
+              </div>
+            )}
             <WordDocTranscript
               isActive={isActive}
               isEditing={isReview}
