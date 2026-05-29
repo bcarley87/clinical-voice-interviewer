@@ -148,7 +148,7 @@ function WelcomeScreen({ onBegin }: { onBegin: () => void }) {
               color: "var(--foreground)",
             }}
           >
-            Welcome.
+            Welcome, Dr. Cecchini.
           </h1>
 
           <p
