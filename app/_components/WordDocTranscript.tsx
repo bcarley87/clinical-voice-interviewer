@@ -105,7 +105,10 @@ export function WordDocTranscript({
       {isEditing ? (
         /* ── Word-doc edit mode ─────────────────────── */
         <div style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: "20px 16px 24px", background: "#e8e8e4", display: "flex", flexDirection: "column" }}>
-          <div style={{ flex: 1, background: "#ffffff", boxShadow: "0 1px 4px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06)", borderRadius: 2, padding: "52px 60px 60px", display: "flex", flexDirection: "column" }}>
+          <div style={{ flex: 1, background: "#ffffff", boxShadow: "0 1px 4px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06)", borderRadius: 2, padding: "36px 60px 60px", display: "flex", flexDirection: "column" }}>
+            <p style={{ margin: "0 0 28px", fontFamily: "var(--font-sans)", fontSize: 11, lineHeight: 1.5, color: "#888", letterSpacing: "0.01em", borderBottom: "1px solid #e8e8e4", paddingBottom: 14 }}>
+              Format this note exactly as you would write it — add paragraph breaks, numbered lists, spacing, or any structure you normally use. When you&rsquo;re done, click <strong style={{ fontWeight: 600, color: "#555" }}>Generate my profile</strong>.
+            </p>
             <textarea
               value={editedNote}
               onChange={(e) => onNoteChange?.(e.target.value)}

@@ -4,17 +4,22 @@ import type { TranscriptMessage } from "@/hooks/useRealtimeSession";
 
 export const maxDuration = 60;
 
-const FORMAT_PROMPT = `You are a clinical note formatter. You will receive a physician's spoken transcript from a voice dictation session.
+const FORMAT_PROMPT = `You are a clinical note formatter. You will receive a physician's initial spoken dictation (HPI and Assessment & Plan only — no follow-up interview content).
 
 Your ONLY jobs are:
 1. Organize the physician's spoken content into two sections: HPI and Assessment & Plan
 2. Fix spelling errors only
+3. Convert spoken ordinal numbering to standard numbered list format
+
+Rules for numbered lists: if the physician enumerated Assessment & Plan items verbally (e.g., "number one diabetes", "one, hypertension", "first problem chest pain"), convert each item to a numbered list entry:
+1. [item as spoken]
+2. [item as spoken]
 
 Strict rules — violations are not acceptable:
 - Do NOT change grammar
 - Do NOT change sentence structure
-- Do NOT change word choice (except correcting misspellings)
-- Do NOT add content that was not spoken
+- Do NOT change word choice (except correcting misspellings and converting spoken numbers to digits)
+- Do NOT add any content that was not spoken
 - Do NOT remove any content
 - Do NOT improve or rephrase anything
 - Preserve the exact order the physician spoke within each section
@@ -27,7 +32,7 @@ Output format — plain text only, nothing else:
 
 ## Assessment & Plan
 
-[physician's words here]
+[physician's words here, with numbered list if they numbered items]
 
 Output only the formatted note. No explanation, no commentary, no preamble.`;
 
@@ -48,10 +53,22 @@ export async function POST(req: Request) {
     return Response.json({ error: "No messages provided" }, { status: 400 });
   }
 
-  const userText = messages
-    .filter((m) => m.role === "user")
-    .map((m) => m.text.trim())
-    .join("\n\n");
+  // Only use the initial dictation — user messages before the second assistant
+  // message (which is the first follow-up question). The first assistant message
+  // is the AI reading the vignette; everything after the second is Q&A.
+  const dictationMessages: TranscriptMessage[] = [];
+  let assistantCount = 0;
+  for (const m of messages) {
+    if (m.role === "assistant") {
+      assistantCount++;
+      if (assistantCount >= 2) break;
+    } else {
+      dictationMessages.push(m);
+    }
+  }
+  const source = dictationMessages.length > 0 ? dictationMessages : messages.filter((m) => m.role === "user");
+
+  const userText = source.map((m) => m.text.trim()).join("\n\n");
 
   if (!userText) {
     return Response.json({ error: "No physician speech found in transcript" }, { status: 400 });
