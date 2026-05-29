@@ -66,6 +66,170 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
+function WelcomeScreen({ onBegin }: { onBegin: () => void }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100dvh",
+        background: "var(--background)",
+        color: "var(--foreground)",
+        fontFamily: "var(--font-sans)",
+        WebkitFontSmoothing: "antialiased",
+      }}
+    >
+      {/* Topbar */}
+      <div
+        style={{
+          height: 52,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0 32px",
+          borderBottom: "1px solid var(--border-soft)",
+          background: "var(--card)",
+          flexShrink: 0,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div
+            style={{
+              width: 18,
+              height: 18,
+              borderRadius: "50%",
+              background: "var(--primary)",
+              boxShadow: "0 0 0 4px var(--accent-soft)",
+              flexShrink: 0,
+            }}
+          />
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 11,
+              fontWeight: 500,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              color: "var(--foreground)",
+            }}
+          >
+            Clinical Voice Interviewer
+          </span>
+        </div>
+        <span
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10.5,
+            color: "var(--muted-foreground)",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+          }}
+        >
+          St. Mercy Health · Rad-Onc
+        </span>
+      </div>
+
+      {/* Main — centered */}
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "0 32px",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 10.5,
+              fontWeight: 500,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              color: "var(--muted-foreground)",
+              marginBottom: 20,
+            }}
+          >
+            St. Mercy Rad-Onc
+          </div>
+
+          <h1
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: 52,
+              fontWeight: 500,
+              letterSpacing: "-0.03em",
+              lineHeight: 1.0,
+              margin: "0 0 14px",
+              color: "var(--foreground)",
+            }}
+          >
+            Welcome.
+          </h1>
+
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: 17,
+              fontWeight: 400,
+              color: "var(--muted-foreground)",
+              letterSpacing: "-0.01em",
+              margin: "0 0 44px",
+            }}
+          >
+            Let&rsquo;s capture your documentation voice.
+          </p>
+
+          <button
+            onClick={onBegin}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: 52,
+              padding: "0 36px",
+              borderRadius: 999,
+              border: "1px solid transparent",
+              background: "var(--primary)",
+              color: "var(--primary-foreground)",
+              fontFamily: "var(--font-sans)",
+              fontSize: 15,
+              fontWeight: 500,
+              letterSpacing: "-0.01em",
+              cursor: "pointer",
+              boxShadow: "0 0 0 6px var(--accent-soft), 0 18px 40px -20px var(--primary)",
+            }}
+          >
+            Begin
+          </button>
+
+          <p
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 10.5,
+              color: "var(--dim-foreground)",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              marginTop: 22,
+            }}
+          >
+            HIPAA-secure · Recordings discarded after session
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function FormattingScreen() {
   return (
     <div
@@ -307,6 +471,7 @@ export default function Home() {
     confirm,
   } = useRealtimeSession();
 
+  const [showWelcome, setShowWelcome] = useState(true);
   const [formattedNote, setFormattedNote] = useState("");
   const [confirmedNote, setConfirmedNote] = useState("");
   const [confirmedMessages, setConfirmedMessages] = useState<TranscriptMessage[]>([]);
@@ -350,6 +515,10 @@ export default function Home() {
     },
     [confirm]
   );
+
+  if (showWelcome) {
+    return <WelcomeScreen onBegin={() => setShowWelcome(false)} />;
+  }
 
   if (status === "formatting") {
     return <FormattingScreen />;
