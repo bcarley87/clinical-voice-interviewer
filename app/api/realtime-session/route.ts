@@ -38,7 +38,7 @@ export async function GET() {
           instructions,
           audio: {
             output: { voice: "coral" },
-            input: { transcription: { model: "whisper-1" } },
+            input: { transcription: { model: "whisper-1", language: "en" } },
           },
         },
       }),

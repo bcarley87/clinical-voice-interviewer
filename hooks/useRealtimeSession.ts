@@ -169,7 +169,7 @@ export function useRealtimeSession() {
           pc.connectionState === "closed"
         ) {
           setError("WebRTC connection lost");
-          setStatus("ended");
+          setStatus("review");
           cleanup();
         }
       };
@@ -201,7 +201,7 @@ export function useRealtimeSession() {
 
       dc.onerror = () => {
         setError("Data channel error — connection lost");
-        setStatus("ended");
+        setStatus("review");
         cleanup();
       };
 

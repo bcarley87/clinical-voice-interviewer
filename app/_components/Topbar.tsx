@@ -9,10 +9,9 @@ function formatTime(totalSeconds: number): string {
 interface TopbarProps {
   isActive: boolean;
   elapsedSeconds: number;
-  onStop: () => void;
 }
 
-export function Topbar({ isActive, elapsedSeconds, onStop }: TopbarProps) {
+export function Topbar({ isActive, elapsedSeconds }: TopbarProps) {
   return (
     <header
       style={{
@@ -74,35 +73,9 @@ export function Topbar({ isActive, elapsedSeconds, onStop }: TopbarProps) {
       {/* Right slot */}
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         {isActive ? (
-          <>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 500, fontVariantNumeric: "tabular-nums", color: "var(--foreground)", letterSpacing: "0.06em" }}>
-              {formatTime(elapsedSeconds)}
-            </span>
-            <button
-              onClick={onStop}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                height: 30,
-                padding: "0 12px",
-                borderRadius: 999,
-                border: "1px solid var(--border)",
-                background: "transparent",
-                color: "var(--foreground)",
-                fontFamily: "var(--font-sans)",
-                fontSize: 12,
-                fontWeight: 500,
-                cursor: "pointer",
-                letterSpacing: "-0.005em",
-              }}
-            >
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="6" y="6" width="12" height="12" rx="1.5" />
-              </svg>
-              Wrap up
-            </button>
-          </>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 500, fontVariantNumeric: "tabular-nums", color: "var(--foreground)", letterSpacing: "0.06em" }}>
+            {formatTime(elapsedSeconds)}
+          </span>
         ) : (
           <>
             <div style={{ textAlign: "right", fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 500, lineHeight: 1.2, color: "var(--foreground)" }}>

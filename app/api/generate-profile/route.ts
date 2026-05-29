@@ -61,7 +61,7 @@ export async function POST(req: Request) {
           content: `Here is the complete interview transcript:\n\n${transcript}`,
         },
       ],
-      maxOutputTokens: 4000,
+      maxOutputTokens: 6000,
     });
 
     return Response.json({ profile: text });
