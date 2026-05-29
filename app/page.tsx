@@ -116,17 +116,6 @@ function WelcomeScreen({ onBegin }: { onBegin: () => void }) {
             Clinical Voice Interviewer
           </span>
         </div>
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 10.5,
-            color: "var(--muted-foreground)",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-          }}
-        >
-          St. Mercy Health · Rad-Onc
-        </span>
       </div>
 
       {/* Main — centered */}
@@ -148,20 +137,6 @@ function WelcomeScreen({ onBegin }: { onBegin: () => void }) {
             textAlign: "center",
           }}
         >
-          <div
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 10.5,
-              fontWeight: 500,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: "var(--muted-foreground)",
-              marginBottom: 20,
-            }}
-          >
-            St. Mercy Rad-Onc
-          </div>
-
           <h1
             style={{
               fontFamily: "var(--font-sans)",
