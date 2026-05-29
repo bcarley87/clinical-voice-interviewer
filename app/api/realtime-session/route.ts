@@ -36,7 +36,10 @@ export async function GET() {
           type: "realtime",
           model: "gpt-realtime",
           instructions,
-          audio: { output: { voice: "coral" } },
+          audio: {
+            output: { voice: "coral" },
+            input: { transcription: { model: "whisper-1" } },
+          },
         },
       }),
     });
