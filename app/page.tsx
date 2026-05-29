@@ -209,7 +209,7 @@ function SessionEnded({
                       Download
                     </button>
                   </div>
-                  <div className="prose prose-sm prose-invert max-w-none">
+                  <div className="prose prose-sm max-w-none">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {fullProfile}
                     </ReactMarkdown>
@@ -282,11 +282,7 @@ export default function Home() {
   } = useRealtimeSession();
 
   if (status === "ended") {
-    return (
-      <div className="dark h-full">
-        <SessionEnded messages={messages} elapsedSeconds={elapsedSeconds} />
-      </div>
-    );
+    return <SessionEnded messages={messages} elapsedSeconds={elapsedSeconds} />;
   }
 
   return (
