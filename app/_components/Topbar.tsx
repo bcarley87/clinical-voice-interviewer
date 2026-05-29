@@ -46,9 +46,6 @@ export function Topbar({ isActive, elapsedSeconds }: TopbarProps) {
         </div>
         <div style={{ fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 500, letterSpacing: "-0.005em", lineHeight: 1.2, color: "var(--foreground)" }}>
           Clinical Voice Interviewer
-          <div style={{ fontSize: 10, fontWeight: 500, fontFamily: "var(--font-mono)", color: "var(--dim-foreground)", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 3 }}>
-            St. Mercy · Radiation Oncology
-          </div>
         </div>
       </div>
 
@@ -79,13 +76,10 @@ export function Topbar({ isActive, elapsedSeconds }: TopbarProps) {
         ) : (
           <>
             <div style={{ textAlign: "right", fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 500, lineHeight: 1.2, color: "var(--foreground)" }}>
-              Dr. Amara Okafor
-              <div style={{ fontSize: 10, fontWeight: 500, fontFamily: "var(--font-mono)", color: "var(--dim-foreground)", letterSpacing: "0.10em", textTransform: "uppercase", marginTop: 3 }}>
-                Attending · MRN-issued
-              </div>
+              Dr. Matthew Cecchini
             </div>
             <div style={{ width: 30, height: 30, borderRadius: 999, background: "var(--muted)", border: "1px solid var(--border)", display: "grid", placeItems: "center", fontFamily: "var(--font-sans)", fontSize: 11, fontWeight: 500, color: "var(--foreground)", flexShrink: 0 }}>
-              AO
+              MC
             </div>
           </>
         )}
