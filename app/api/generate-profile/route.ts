@@ -23,7 +23,20 @@ function buildTranscript(formattedNote: string, messages: TranscriptMessage[]): 
     parts.push("DICTATED NOTE (physician-edited):\n\n" + formattedNote.trim());
   }
 
-  const qaMessages = messages.filter((m) => m.role === "assistant" || m.role === "user");
+  // Skip the first assistant message (vignette presentation) and the initial
+  // dictation (user messages before the second assistant message) — those are
+  // already in the DICTATED NOTE section. Only include the actual Q&A exchanges.
+  const qaMessages: TranscriptMessage[] = [];
+  let assistantCount = 0;
+  for (const m of messages) {
+    if (m.role === "assistant") {
+      assistantCount++;
+      if (assistantCount >= 2) qaMessages.push(m);
+    } else if (assistantCount >= 2) {
+      qaMessages.push(m);
+    }
+  }
+
   if (qaMessages.length > 0) {
     const qa = qaMessages
       .map((m) => {
